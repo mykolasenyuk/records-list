@@ -2,8 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 
-const contactsRouter = require('./routes/api/contacts')
-const authRouter = require('./routes/api/auth')
+const recordsRouter = require('./routes/api/records')
 
 const app = express()
 
@@ -14,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('public'))
 
-// app.use('/contacts', contactsRouter)
+app.use('/records', recordsRouter)
 // app.use('/users', authRouter)
 
 app.use((req, res) => {
