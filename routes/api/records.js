@@ -8,7 +8,8 @@ const recordsValidation = validation(joiSchema)
 
 router.get('/', ctrl.getAllRecords)
 router.post('/', recordsValidation, ctrl.addRecord)
-// router.delete('/:bookId', ctrl.dltBook)
+router.get('/:recordId', ctrl.getRecordById)
+router.delete('/:recordId', ctrl.dltRecordById)
 // router.put('/:bookId', booksValidation, ctrl.updBook)
 // router.get('/:bookId', ctrl.getBookById)
 

@@ -3,7 +3,7 @@ const { Record } = require('../../models')
 const getAllRecords = async (req, res, next) => {
   try {
     const records = await Record.find({})
-    console.log(records)
+    // console.log(records)
     res.json({
       status: '✔️ Success',
       code: 200,
