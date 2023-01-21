@@ -3,8 +3,8 @@ import { addRecord, dltRecord, fetchRecords } from './services/api'
 import AudioRecoder from './components/AudioRecoder/AudioRecoder'
 import Header from './components/Header/Header'
 import RecordsTable from './components/RecordsTable/RecordsTable'
-import TextInput from './components/TextInput/TextInput'
 import { ToastContainer, toast } from 'react-toastify'
+import getBlobDuration from "get-blob-duration";
 export default function App() {
   const [records, setRecords] = useState([])
 
@@ -23,53 +23,21 @@ export default function App() {
 
   const handleSubmitRecord = ({ text, voice_record }) => {
     if (records.find((record) => record.text === text)) {
-      // toast.error(` 🛑 '${text}' is already in your list`, {
-      //   position: 'top-right',
-      //   autoClose: 3000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      // })
       return
     }
     if (records.find((record) => record.voice_record === voice_record)) {
-      // toast.error(`🛑 '${voice_record}' is already in your list`, {
-      //   position: 'top-right',
-      //   autoClose: 3000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      // })
       return
     }
-    addVoiceRecord({ text, voice_record })
-    // toast.success(`🚀 '${text}' added to record list`, {
-    //   position: 'top-right',
-    //   autoClose: 3000,
-    //   hideProgressBar: false,
-    //   closeOnClick: true,
-    //   pauseOnHover: true,
-    //   draggable: true,
-    //   progress: undefined,
-    // })
+    addVoiceRecord({ text, voice_record }).then(fetchData)
   }
 
   const deleteRecord = async (recordId) => {
     await dltRecord(recordId)
     await fetchData()
-    // toast(` 👍🏻 Deleted`, {
-    //   position: 'top-right',
-    //   autoClose: 3000,
-    //   hideProgressBar: false,
-    //   closeOnClick: true,
-    //   pauseOnHover: true,
-    //   draggable: true,
-    //   progress: undefined,
-    // });
+  }
+  const getDuration = async () => {
+    const blob = b64toBlob(voiceRecord)
+    return await getBlobDuration(blob)
   }
   return (
     <div className="container mx-auto">

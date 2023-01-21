@@ -38,8 +38,8 @@ export default function AudioRecoder({ onSubmit }) {
   };
   const reset = () => {
     setText('')
-    setVoiceRecordUrl(null)
-    setVoiceRecordBlob(null)
+    setVoiceRecordUrl('')
+    setVoiceRecordBlob('')
   }
 
   const handleSubmit = (e) => {
@@ -61,13 +61,14 @@ export default function AudioRecoder({ onSubmit }) {
             className="block mb-5 p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             value={text}
         ></textarea>
-        {!voice_record_url && text.length > 0 && <div className={"inline"}>
+
+        {<div className={"inline"}>
           <AudioRecorder
               onRecordingComplete={addAudioElement}
               recorderControls={recorderControls}
           />
         </div>}
-        {voice_record_url && <audio src={voice_record_url} controls></audio>}
+        {<audio className={"mt-5"} src={voice_record_url} controls></audio>}
         {voice_record_url && text.length > 0 && <>
           <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">Save</button>
           <button type="button" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onClick={reset}>
