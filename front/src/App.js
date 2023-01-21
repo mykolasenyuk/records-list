@@ -60,6 +60,7 @@ export default function App() {
 
   const deleteRecord = async (recordId) => {
     await dltRecord(recordId)
+    await fetchData()
     // toast(` 👍🏻 Deleted`, {
     //   position: 'top-right',
     //   autoClose: 3000,
@@ -71,10 +72,10 @@ export default function App() {
     // });
   }
   return (
-    <div>
+    <div className="container mx-auto">
       <Header />
       <AudioRecoder onSubmit={handleSubmitRecord} />
-      <RecordsTable records={records} onDltRecord={deleteRecord} />
+        {records && records.length > 0 && <RecordsTable records={records} onDltRecord={deleteRecord} />}
       <ToastContainer
         position="top-right"
         autoClose={3000}
