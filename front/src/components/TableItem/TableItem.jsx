@@ -27,19 +27,22 @@ export default  function TableItem({record,onDltRecord}) {
 
         return new Blob(byteArrays, { type: contentType })
     }
-    const togglePlay = (voiceRecord) => {
+    const togglePlay = async (voiceRecord,duration) => {
         audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
-        console.log(audio.src)
-        console.log(audio)
-        if(!isPlaying){
-            audio.play()
+        const time = duration * 1000
+        if (!isPlaying) {
             setIsPlaying(!isPlaying)
-            return
-        }else {
-            audio.pause()
-            setIsPlaying(!isPlaying)
-            return;
+            await audio.play()
+            setTimeout(() => {
+                setIsPlaying(false)
+                audio.pause()
+            }, time)
         }
+        // else {
+        //     audio.pause()
+        //     setIsPlaying(!isPlaying)
+        //     return;
+        // }
     }
 
     const getTimeString = (seconds) => {
@@ -65,18 +68,19 @@ export default  function TableItem({record,onDltRecord}) {
     return(
         <tr  >
             <td className={'px-5'}>
-                <button type='button' onClick={()=>{togglePlay(record.voice_record)}} >
-                    {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-white hover:fill-red-100" /> : <AiFillPlayCircle className="w-8 h-8 fill-white hover:fill-red-100"   />}
+                <button type='button' onClick={()=>{togglePlay(record.voice_record,record.duration)}} >
+                    {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-blue-500  scale-90  animate-pulse" />
+                        : <AiFillPlayCircle className="w-8 h-8 fill-white ease-in-out hover:fill-blue-500 hover:duration-300 hover:scale-90  "   />}
 
                 </button>
 
             </td>
             <td className="px-5 text-cyan-100">{getTimeString(record.duration)}</td>
-            <td className="px-5 text-cyan-100">{record.text}</td>
+            <td className="px-5 text-cyan-100 hover:drop-shadow-lg">{record.text}</td>
             <td>
                 <button
                     className={
-                        'bg-red-500 hover:bg-red-700 text-white font-bold p-2  rounded-full m-2'
+                        'bg-red-500 hover:bg-red-700 text-white font-bold p-2  rounded-full m-2 ease-in-out hover:duration-300 hover:scale-90 '
                     }
                     type="button"
                     onClick={() => onDltRecord(record._id)}
