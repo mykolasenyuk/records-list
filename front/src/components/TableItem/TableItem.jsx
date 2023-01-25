@@ -69,13 +69,13 @@ export default  function TableItem({record,onDltRecord}) {
         <tr  >
             <td className={'px-5'}>
                 <button type='button' onClick={()=>{togglePlay(record.voice_record,record.duration)}} >
-                    {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-white hover:fill-red-100" /> : <AiFillPlayCircle className="w-8 h-8 fill-white hover:fill-red-100"   />}
+                    {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-amber-500  scale-90  animate-pulse" /> : <AiFillPlayCircle className="w-8 h-8 fill-white ease-in-out hover:fill-amber-500 hover:duration-300 hover:scale-90  "   />}
 
                 </button>
 
             </td>
             <td className="px-5 text-cyan-100">{getTimeString(record.duration)}</td>
-            <td className="px-5 text-cyan-100">{record.text}</td>
+            <td className="px-5 text-cyan-100 hover:drop-shadow-lg">{record.text}</td>
             <td>
                 <button
                     className={
