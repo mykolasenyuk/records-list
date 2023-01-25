@@ -1,5 +1,6 @@
-import {useState} from "react";
-import getBlobDuration from "get-blob-duration";
+import { useState ,useEffect} from 'react'
+import { AiFillPlayCircle, AiFillPauseCircle } from 'react-icons/ai'
+import TableItem from "../TableItem/TableItem";
 
 export default function RecordsTable({ records, onDltRecord }) {
     const audio = new Audio();
@@ -36,8 +37,8 @@ export default function RecordsTable({ records, onDltRecord }) {
     <>
         <hr className={"my-5"}/>
         <p className={"w-full mx-10"}>Duration: {getTimeString(getTime())}</p>
-      <table className="w-full text-center">
-        <thead>
+        <table className="w-full text-center">
+            <thead className='text-cyan-200'>
         <th>Audio</th>
           <th>Duration</th>
           <th>Caption</th>
@@ -45,18 +46,11 @@ export default function RecordsTable({ records, onDltRecord }) {
         </thead>
         <tbody>
             {records && records.map((record) => (
-                <tr key={record._id}>
-                    <td className={"px-5"}>
-                        <button className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"} type="button" onClick={() => {playVoice(record.voice_record)}}> Play</button>
-                    </td>
-                    <td className={"px-5"}>{getTimeString(record.duration)}</td>
-                    <td className={"px-5"}>{record.text}</td>
-                    <td>
-                        <button className={"bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2"} type="button" onClick={() => onDltRecord(record._id)}>
-                            Delete
-                        </button>
-                    </td>
-                </tr>
+                <TableItem
+                    key={record._id}
+                    record={record}
+                    onDltRecord={onDltRecord}
+                />
             ))}
         </tbody>
       </table>
