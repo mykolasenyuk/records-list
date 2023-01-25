@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
-
+import {AiFillPlayCircle, AiOutlineSave} from 'react-icons/ai'
+import {MdDataSaverOn, MdCancel} from "react-icons/md";
 export default function AudioRecoder({ onSubmit }) {
   const [text, setText] = useState('')
   const [voice_record_url, setVoiceRecordUrl] = useState('')
@@ -53,28 +54,42 @@ export default function AudioRecoder({ onSubmit }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label className="mb-5">Voice record subtitles</label>
+      <form className="flex flex-col" onSubmit={handleSubmit}>
+        <label className="mb-2 p-1 text-white ">Voice record subtitles</label>
         <textarea
             placeholder="text here"
             onChange={handleChange}
             className="block mb-5 p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             value={text}
         ></textarea>
-
-        {<div className={"inline"}>
-          <AudioRecorder
-              onRecordingComplete={addAudioElement}
-              recorderControls={recorderControls}
-          />
-        </div>}
-        {<audio className={"mt-5"} src={voice_record_url} controls></audio>}
-        {voice_record_url && text.length > 0 && <>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">Save</button>
-          <button type="button" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onClick={reset}>
-            Cancel
-          </button>
-        </>}
+        {!voice_record_url && text.length > 0 && (
+            <div className={'inline'}>
+              <AudioRecorder
+                  onRecordingComplete={addAudioElement}
+                  recorderControls={recorderControls}
+              />
+            </div>
+        )}
+        {voice_record_url && <audio src={voice_record_url} controls></audio>}
+        {voice_record_url && text.length > 0 && (
+            <div className='flex'>
+              <button
+                  type="submit"
+                  className=" flex items-center justify-between bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
+              >
+                <MdDataSaverOn className="mr-1"/>
+                <span>Save</span>
+              </button>
+              <button
+                  type="button"
+                  className="flex items-center justify-between bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded m-2"
+                  onClick={reset}
+              >
+                <MdCancel className="mr-1"/>
+                <span>Cancel</span>
+              </button>
+            </div>
+        )}
       </form>
     </>
   )
