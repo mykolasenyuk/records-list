@@ -27,19 +27,23 @@ export default  function TableItem({record,onDltRecord}) {
 
         return new Blob(byteArrays, { type: contentType })
     }
-    const togglePlay = (voiceRecord) => {
+    const togglePlay = async (voiceRecord,duration) => {
         audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
-        console.log(audio.src)
-        console.log(audio)
-        if(!isPlaying){
-            audio.play()
+        const time = duration * 1000
+        audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
+        if (!isPlaying) {
             setIsPlaying(!isPlaying)
-            return
-        }else {
-            audio.pause()
-            setIsPlaying(!isPlaying)
-            return;
+            await audio.play()
+            setTimeout(() => {
+                setIsPlaying(false)
+                audio.pause()
+            }, time)
         }
+        // else {
+        //     audio.pause()
+        //     setIsPlaying(!isPlaying)
+        //     return;
+        // }
     }
 
     const getTimeString = (seconds) => {
@@ -65,7 +69,7 @@ export default  function TableItem({record,onDltRecord}) {
     return(
         <tr  >
             <td className={'px-5'}>
-                <button type='button' onClick={()=>{togglePlay(record.voice_record)}} >
+                <button type='button' onClick={()=>{togglePlay(record.voice_record,record.duration)}} >
                     {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-white hover:fill-red-100" /> : <AiFillPlayCircle className="w-8 h-8 fill-white hover:fill-red-100"   />}
 
                 </button>
