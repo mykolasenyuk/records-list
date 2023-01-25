@@ -36,7 +36,7 @@ export default function RecordsTable({ records, onDltRecord }) {
   return (
     <>
         <hr className={"my-5"}/>
-        <p className={"w-full mx-10"}>Duration: {getTimeString(getTime())}</p>
+        <p className={"w-full  text-xl text-right text-cyan-100 mb-3"}>Duration: <span className="text-lg text-amber-600">{getTimeString(getTime())}</span></p>
         <table className="w-full text-center">
             <thead className='text-cyan-200'>
         <th>Audio</th>
