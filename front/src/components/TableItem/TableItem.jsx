@@ -30,7 +30,6 @@ export default  function TableItem({record,onDltRecord}) {
     const togglePlay = async (voiceRecord,duration) => {
         audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
         const time = duration * 1000
-        audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
         if (!isPlaying) {
             setIsPlaying(!isPlaying)
             await audio.play()
