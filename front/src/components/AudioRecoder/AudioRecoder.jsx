@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
 import {AiFillPlayCircle, AiOutlineSave} from 'react-icons/ai'
 import {MdDataSaverOn, MdCancel} from "react-icons/md";
@@ -52,6 +52,7 @@ export default function AudioRecoder({ onSubmit }) {
         .then(reset)
   }
 
+
   return (
     <>
       <form className="flex flex-col" onSubmit={handleSubmit}>
@@ -66,11 +67,11 @@ export default function AudioRecoder({ onSubmit }) {
             <div className={'inline'}>
               <AudioRecorder
                   onRecordingComplete={addAudioElement}
-                  recorderControls={recorderControls}
+                  recorderControlls={recorderControls}
               />
             </div>
         )}
-        {voice_record_url && <audio src={voice_record_url} controls></audio>}
+        {voice_record_url && text.length > 0 && <audio src={voice_record_url} controls></audio>}
         {voice_record_url && text.length > 0 && (
             <div className='flex'>
               <button
