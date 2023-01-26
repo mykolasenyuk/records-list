@@ -12,6 +12,7 @@ export default function App() {
   const[isLoading,setIsLoading] = useState(false)
   const [pageCount, setPageCount]=useState(0)
   const [page, setPage]=useState(1)
+  const[totalDuration, setTotalDuration]=useState(0)
 
   const addVoiceRecord = async ({ text, voice_record,duration }) => {
     await addRecord({ text, voice_record,duration })
@@ -44,9 +45,12 @@ export default function App() {
   }
   const fetchData=async(page)=>{
     const data = await fetchRecords(page)
+    // console.log(data)
     setRecords(data.records)
     setPageCount(data.totalPages)
     setIsLoading(false)
+    setTotalDuration(data.totalDuration.total)
+    // console.log((totalDuration))
   }
 
   const handlePageClick = (event) => {
@@ -79,7 +83,11 @@ export default function App() {
 
           </div>: <div> <AudioRecoder onSubmit={handleSubmitRecord} />
             {records && records.length > 0 && (
-                <RecordsTable records={records} onDltRecord={deleteRecord} />
+                <RecordsTable
+                    records={records}
+                    onDltRecord={deleteRecord}
+                    totalDuration={totalDuration}
+                />
             )}</div>}
 
         </div>
