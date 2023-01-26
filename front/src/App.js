@@ -11,8 +11,8 @@ export default function App() {
   const [records, setRecords] = useState([])
   const[isLoading,setIsLoading] = useState(false)
 
-  const addVoiceRecord = async ({ text, voice_record }) => {
-    await addRecord({ text, voice_record })
+  const addVoiceRecord = async ({ text, voice_record,duration }) => {
+    await addRecord({ text, voice_record,duration })
   }
   const loading = ()=>{
     setIsLoading(true)
@@ -21,7 +21,7 @@ export default function App() {
     },2000)
   }
 
-  const handleSubmitRecord = async ({text, voice_record}) => {
+  const handleSubmitRecord = async ({text, voice_record,duration}) => {
     if (records.find((record) => record.text === text)) {
       toast.error(` 🛑 '${text}' is already in your list`)
       return
@@ -30,7 +30,7 @@ export default function App() {
       toast.error(`🛑 '${voice_record}' is already in your list`)
       return
     }
-    await addVoiceRecord({text, voice_record})
+    await addVoiceRecord({text, voice_record,duration})
     loading()
 
     toast.success(`🚀 '${text}' added to record list`)
@@ -59,7 +59,7 @@ export default function App() {
   // }
   return (
       <>
-        <div className="container mx-auto">
+        <div className="container mx-auto p-2">
           <Header />
 
 

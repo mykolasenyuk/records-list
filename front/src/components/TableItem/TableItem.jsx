@@ -85,7 +85,7 @@ export default  function TableItem({record,onDltRecord}) {
                     type="button"
                     onClick={() => onDltRecord(record._id)}
                 >
-                    <AiOutlineDelete className="w-5 h-5 fill-white" />
+                    <AiOutlineDelete className="w-5 h-5 fill-white " />
                 </button>
             </td>
         </tr>

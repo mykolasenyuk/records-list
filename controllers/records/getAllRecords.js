@@ -2,12 +2,13 @@ const { Record } = require('../../models')
 
 const getAllRecords = async (req, res, next) => {
   try {
-    const records = await Record.find({})
-    // console.log(records)
+    const { limit = 2, page = 1} = req.query
+    const { docs: records, ...rest } = await Record.paginate({},{limit,page})
+
     res.json({
       status: '✔️ Success',
       code: 200,
-      records,
+      data: { records, ...rest },
     })
   } catch (error) {
     next(error)
