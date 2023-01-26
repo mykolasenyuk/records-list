@@ -14,9 +14,7 @@ const getRecordById = async (req, res, next) => {
       })
       return
     }
-    res.json({
-      status: 'Success',
-      code: 200,
+    res.status(200).json({
       result,
     })
   } catch (error) {

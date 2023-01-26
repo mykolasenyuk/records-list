@@ -76,7 +76,9 @@ export default  function TableItem({record,onDltRecord}) {
 
             </td>
             <td className="px-5 text-cyan-100">{getTimeString(record.duration)}</td>
-            <td className="px-5 text-cyan-100 hover:drop-shadow-lg">{record.text}</td>
+            <td className="px-5 text-cyan-100 hover:drop-shadow-lg">
+                <p >{record.text}</p>
+                </td>
             <td>
                 <button
                     className={
