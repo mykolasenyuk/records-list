@@ -6,8 +6,6 @@ import RecordsTable from './components/RecordsTable/RecordsTable'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Dna } from  'react-loader-spinner'
-import getBlobDuration from "get-blob-duration";
-import ReactPaginate from 'react-paginate';
 import Paginate from "./components/Paginate/Paginate";
 export default function App() {
   const [records, setRecords] = useState([])
