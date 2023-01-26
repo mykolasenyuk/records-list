@@ -13,13 +13,8 @@ const addRecord = async (req, res, next) => {
 
     const result = await Record.create(newRecord)
 
-    res.json({
-      status: 'Success',
-      code: 201,
-      message: `✔️ Record '${req.body.text}' added`,
-      data: {
+    res.status(201).json({
         result,
-      },
     })
   } catch (error) {
     next(error)

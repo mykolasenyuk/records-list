@@ -31,7 +31,7 @@ export async function fetchRecords(page) {
   try {
     const {data} = await axios.get(`/records?page=${page}`)
 
-    const records = data.data;
+    const records = data;
     // for (let i = 0; i < records.length; ++i) {
     //   records[i].duration = await getDuration(records[i].voice_record)
     //
