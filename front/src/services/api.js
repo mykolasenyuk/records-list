@@ -29,11 +29,13 @@ const getDuration = async (voiceRecord) => {
 
 export async function fetchRecords() {
   try {
-    const { data } = await axios.get('/records')
-    const records = data.records;
-    for (let i = 0; i < records.length; ++i) {
-      records[i].duration = await getDuration(records[i].voice_record)
-    }
+    const {data} = await axios.get('/records')
+
+    const records = data.data.records;
+    // for (let i = 0; i < records.length; ++i) {
+    //   records[i].duration = await getDuration(records[i].voice_record)
+    //
+    // }
     return records
   } catch (error) {
     console.log(error)

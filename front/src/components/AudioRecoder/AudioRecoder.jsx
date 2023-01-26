@@ -1,19 +1,23 @@
 import {useEffect, useState} from 'react'
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
-import {AiFillPlayCircle, AiOutlineSave} from 'react-icons/ai'
 import {MdDataSaverOn, MdCancel} from "react-icons/md";
+import getBlobDuration from "get-blob-duration";
+
 export default function AudioRecoder({ onSubmit }) {
   const [text, setText] = useState('')
   const [voice_record_url, setVoiceRecordUrl] = useState('')
   const [voice_record_blob, setVoiceRecordBlob] = useState('')
+  const [duration, setDuration] = useState(0)
   const recorderControls = useAudioRecorder()
 
   const handleChange = (e) => {
     setText(e.currentTarget.value)
   }
-  const addAudioElement = (blob) => {
+  const addAudioElement = async (blob) => {
     setVoiceRecordUrl(URL.createObjectURL(blob))
     setVoiceRecordBlob(blob)
+    const timeDuration = await getBlobDuration(blob)
+    setDuration(timeDuration)
   }
   const blobUrlToBase64 = blobUrl => {
     return new Promise(resolve => {
@@ -41,13 +45,14 @@ export default function AudioRecoder({ onSubmit }) {
     setText('')
     setVoiceRecordUrl('')
     setVoiceRecordBlob('')
+    setDuration(0)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     blobToBase64(voice_record_blob)
         .then(voiceRecordInBase64 => {
-          onSubmit({ text, voice_record: voiceRecordInBase64 })
+          onSubmit({ text, voice_record: voiceRecordInBase64,duration })
         })
         .then(reset)
   }
