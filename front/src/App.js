@@ -7,9 +7,13 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Dna } from  'react-loader-spinner'
 import getBlobDuration from "get-blob-duration";
+import ReactPaginate from 'react-paginate';
+import Paginate from "./components/Paginate/Paginate";
 export default function App() {
   const [records, setRecords] = useState([])
   const[isLoading,setIsLoading] = useState(false)
+  const [pageCount, setPageCount]=useState(0)
+  const [page, setPage]=useState(1)
 
   const addVoiceRecord = async ({ text, voice_record,duration }) => {
     await addRecord({ text, voice_record,duration })
@@ -32,7 +36,6 @@ export default function App() {
     }
     await addVoiceRecord({text, voice_record,duration})
     loading()
-
     toast.success(`🚀 '${text}' added to record list`)
   }
 
@@ -41,28 +44,31 @@ export default function App() {
     toast(` 👍🏻 Deleted`)
     loading()
   }
+  const fetchData=async(page)=>{
+    const data = await fetchRecords(page)
+    setRecords(data.records)
+    setPageCount(data.totalPages)
+    setIsLoading(false)
+  }
+
+  const handlePageClick = (event) => {
+    const newPage = (event.selected +1)
+    loading()
+    setPage(newPage)
+
+  };
 
   useEffect(() => {
-    const fetchData=async()=>{
-      const data = await fetchRecords()
-      setRecords(data)
-      setIsLoading(false)
-    }
-    fetchData()
-  }, [isLoading])
+    fetchData(page)
+  }, [isLoading,page])
+
   useEffect(() => {
     loading()
   },[])
-  // const getDuration = async () => {
-  //   const blob = b64toBlob(voiceRecord)
-  //   return await getBlobDuration(blob)
-  // }
   return (
       <>
         <div className="container mx-auto p-2">
           <Header />
-
-
           {isLoading ? <div className="flex justify-center ">
             <Dna
                 visible={true}
@@ -79,6 +85,10 @@ export default function App() {
             )}</div>}
 
         </div>
+        <Paginate
+            handlePageClick={handlePageClick}
+            pageCount={pageCount}
+        />
         <ToastContainer
             position="top-right"
             autoClose={2500}

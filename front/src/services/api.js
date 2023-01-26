@@ -27,11 +27,11 @@ const getDuration = async (voiceRecord) => {
   return await getBlobDuration(blob)
 }
 
-export async function fetchRecords() {
+export async function fetchRecords(page) {
   try {
-    const {data} = await axios.get('/records')
+    const {data} = await axios.get(`/records?page=${page}`)
 
-    const records = data.data.records;
+    const records = data.data;
     // for (let i = 0; i < records.length; ++i) {
     //   records[i].duration = await getDuration(records[i].voice_record)
     //

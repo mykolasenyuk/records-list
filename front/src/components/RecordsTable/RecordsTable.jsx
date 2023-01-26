@@ -1,5 +1,4 @@
 import { useState ,useEffect} from 'react'
-import { AiFillPlayCircle, AiFillPauseCircle } from 'react-icons/ai'
 import TableItem from "../TableItem/TableItem";
 
 export default function RecordsTable({ records, onDltRecord }) {
