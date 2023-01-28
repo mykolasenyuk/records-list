@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {toast} from "react-toastify";
 
@@ -17,6 +17,16 @@ export default function Login () {
                 return;
         }
     };
+    const loggedIn = async () => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        const auth = window.atob(user).split(':')
+        const userName = auth[0];
+        const pass = auth[1];
+        if (userName == process.env.REACT_APP_USERNAME && pass == process.env.REACT_APP_PASSWORD){
+            navigate("/records")
+        }
+        return
+    }
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -40,10 +50,10 @@ export default function Login () {
             return
         }
 
-
     };
-
-
+    useEffect(()=>{
+        loggedIn()
+    },[])
     return(
         <>
             <div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] w-[390px] p-[55px] bg-blue-50 rounded-xl" >

@@ -9,6 +9,7 @@ import AudioRecoder from "../components/AudioRecoder/AudioRecoder";
 import RecordsTable from "../components/RecordsTable/RecordsTable";
 import Paginate from "../components/Paginate/Paginate";
 import {useNavigate} from "react-router-dom";
+import Logout from "../components/Logout/Logout";
 export default function RecordsList( ) {
     const [isLogged,setIsLogged]=useState(false)
     const [records, setRecords] = useState([])
@@ -26,12 +27,11 @@ export default function RecordsList( ) {
         const auth = window.atob(user).split(':')
         const userName = auth[0];
         const pass = auth[1];
-        console.log(process.env.REACT_APP_USERNAME)
-        console.log(userName,pass)
-        if (!user) {
-            navigate("/")
+
+        if (userName !== process.env.REACT_APP_USERNAME && pass !== process.env.REACT_APP_PASSWORD){
+                    navigate("/")
             setIsLogged(false)
-        }
+                }
         setIsLogged(!isLogged)
         await fetchData(page)
     }
@@ -63,7 +63,6 @@ export default function RecordsList( ) {
     }
     const fetchData=async(page)=>{
         const data = await fetchRecords(page)
-        // console.log(data)
         setRecords(data.records)
         setPageCount(data.totalPages)
         setIsLoading(false)
@@ -114,6 +113,7 @@ export default function RecordsList( ) {
                 handlePageClick={handlePageClick}
                 pageCount={pageCount}
             />
+            <Logout/>
         </>
         )
 
