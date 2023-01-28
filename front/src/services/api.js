@@ -27,13 +27,19 @@ const getDuration = async (voiceRecord) => {
   return await getBlobDuration(blob)
 }
 
-export async function fetchRecords() {
+const user = JSON.parse(localStorage.getItem('user'))
+const authData = { 'Authorization': 'Basic ' + user }
+
+export async function fetchRecords(page) {
   try {
-    const { data } = await axios.get('/records')
-    const records = data.records;
-    for (let i = 0; i < records.length; ++i) {
-      records[i].duration = await getDuration(records[i].voice_record)
-    }
+
+    const {data} = await axios.get(`/records?page=${page}`,{headers: {common: authData}})
+
+    const records = data;
+    // for (let i = 0; i < records.length; ++i) {
+    //   records[i].duration = await getDuration(records[i].voice_record)
+    //
+    // }
     return records
   } catch (error) {
     console.log(error)
@@ -42,7 +48,7 @@ export async function fetchRecords() {
 
 export async function addRecord(record) {
   try {
-    const { data } = await axios.post('/records', record)
+    const { data } = await axios.post('/records', record,{headers: {common: authData}})
     return data
   } catch (error) {
     console.log(error)
@@ -50,6 +56,6 @@ export async function addRecord(record) {
 }
 
 export async function dltRecord(id) {
-  await axios.delete(`/records/${id}`)
+  await axios.delete(`/records/${id}`,{headers: {common: authData}})
   return id
 }

@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const authentication = require('./middlewares/authentication')
 
 const recordsRouter = require('./routes/api/records')
 
@@ -12,9 +13,9 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 app.use(express.static('public'))
+app.use(authentication)
 
 app.use('/records', recordsRouter)
-// app.use('/users', authRouter)
 
 app.use((req, res) => {
   res.status(404).json({

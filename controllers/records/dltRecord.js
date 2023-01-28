@@ -15,9 +15,7 @@ const dltRecordById = async (req, res, next) => {
       return
     }
     res.json({
-      status: 'Success',
       code: 200,
-      message: ' ✔️ Record deleted',
     })
   } catch (error) {
     next(error)
