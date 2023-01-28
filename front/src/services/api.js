@@ -29,7 +29,9 @@ const getDuration = async (voiceRecord) => {
 
 export async function fetchRecords(page) {
   try {
-    const {data} = await axios.get(`/records?page=${page}`)
+const user = JSON.parse(localStorage.getItem('user'))
+    const authData = { 'Authorization': 'Basic ' + user }
+    const {data} = await axios.get(`/records?page=${page}`,{headers: {common: authData}})
 
     const records = data;
     // for (let i = 0; i < records.length; ++i) {
