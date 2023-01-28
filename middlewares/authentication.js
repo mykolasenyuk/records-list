@@ -12,10 +12,8 @@ function authentication(req, res, next) {
         'base64').toString().split(':');
     const user = auth[0];
     const pass = auth[1];
+    if (user == process.env.USERNAME && pass == process.env.PASSWORD) {
 
-    if (user == 'admin' && pass == 'password') {
-
-        // If Authorized user
         next();
     } else {
         const err = new Error('You are not authenticated!');

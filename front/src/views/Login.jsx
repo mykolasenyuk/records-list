@@ -1,5 +1,6 @@
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import {toast} from "react-toastify";
 
 export default function Login () {
     const [user, setUser] = useState('');
@@ -9,7 +10,6 @@ export default function Login () {
     const handleChange = ({ target: { name, value } }) => {
         switch (name) {
             case 'user':
-                console.log(value)
                 return setUser(value);
             case 'password':
                 return setPassword(value);
@@ -20,11 +20,27 @@ export default function Login () {
 
     const handleSubmit = e => {
         e.preventDefault();
-        const userData = window.btoa(user + ':' + password)
-        localStorage.setItem('user', JSON.stringify(userData))
-        setUser('');
-        setPassword('');
-        navigate("/records")
+        if (user == process.env.REACT_APP_USERNAME && password == process.env.REACT_APP_PASSWORD) {
+            const userData = window.btoa(user + ':' + password)
+            localStorage.setItem('user', JSON.stringify(userData))
+            setUser('');
+            setPassword('');
+            navigate("/records")
+            toast.success(`🚀 Logged in`)
+        } if (user !== process.env.REACT_APP_USERNAME && password !== process.env.REACT_APP_PASSWORD) {
+            toast.error(`Invalid credentials`)
+            return
+        }
+        if (user !== process.env.REACT_APP_USERNAME){
+            toast.error(`Invalid user `)
+            return
+        }
+        if (password !== process.env.REACT_APP_PASSWORD){
+            toast.error(`Invalid password `)
+            return
+        }
+
+
     };
 
 

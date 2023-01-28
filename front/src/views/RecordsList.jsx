@@ -8,15 +8,32 @@ import {Dna} from "react-loader-spinner";
 import AudioRecoder from "../components/AudioRecoder/AudioRecoder";
 import RecordsTable from "../components/RecordsTable/RecordsTable";
 import Paginate from "../components/Paginate/Paginate";
+import {useNavigate} from "react-router-dom";
 export default function RecordsList( ) {
+    const [isLogged,setIsLogged]=useState(false)
     const [records, setRecords] = useState([])
     const[isLoading,setIsLoading] = useState(false)
     const [pageCount, setPageCount]=useState(0)
     const [page, setPage]=useState(1)
     const[totalDuration, setTotalDuration]=useState(0)
+    const navigate = useNavigate()
 
     const addVoiceRecord = async ({ text, voice_record,duration }) => {
         await addRecord({ text, voice_record,duration })
+    }
+    const logged = async () => {
+        const user = JSON.parse(localStorage.getItem('user'))
+        const auth = window.atob(user).split(':')
+        const userName = auth[0];
+        const pass = auth[1];
+        console.log(process.env.REACT_APP_USERNAME)
+        console.log(userName,pass)
+        if (!user) {
+            navigate("/")
+            setIsLogged(false)
+        }
+        setIsLogged(!isLogged)
+        await fetchData(page)
     }
     const loading = ()=>{
         setIsLoading(true)
@@ -51,7 +68,7 @@ export default function RecordsList( ) {
         setPageCount(data.totalPages)
         setIsLoading(false)
         setTotalDuration(data.totalDuration.total)
-        // console.log((totalDuration))
+
     }
 
     const handlePageClick = (event) => {
@@ -62,15 +79,15 @@ export default function RecordsList( ) {
     };
 
     useEffect(() => {
-        fetchData(page)
+        logged()
     }, [isLoading,page])
 
-    console.log(records)
     useEffect(() => {
         loading()
     },[])
     return(
         <>
+            <Header/>
             <div className="container mx-auto p-2">
 
                 {isLoading ? <div className="flex justify-center ">
