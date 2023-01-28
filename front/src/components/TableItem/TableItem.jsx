@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 
 export default  function TableItem({record,onDltRecord}) {
     const [isPlaying, setIsPlaying] = useState(false)
+    const [isShow,setIsShow]=useState(false)
 
     const audio = new Audio()
 
@@ -60,13 +61,17 @@ export default  function TableItem({record,onDltRecord}) {
         setIsPlaying(!isPlaying)
 
     }
+    const toggleShow=()=>{
+        setIsShow(!isShow)
+    }
 
     useEffect(() => {
         console.log('Playing: ', isPlaying);
     }, [isPlaying]);
 
     return(
-        <tr  >
+        <>
+        <tr>
             <td className={'px-5'}>
                 <button type='button' onClick={()=>{togglePlay(record.voice_record,record.duration)}} >
                     {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-blue-500  scale-90  animate-pulse" />
@@ -76,9 +81,7 @@ export default  function TableItem({record,onDltRecord}) {
 
             </td>
             <td className="px-5 text-cyan-100">{getTimeString(record.duration)}</td>
-            <td className="px-5 text-cyan-100 hover:drop-shadow-lg">
-                <p >{record.text}</p>
-                </td>
+            <td className="max-w-[50px]  text-cyan-100 hover:text-blue-500 duration-300 hover:scale-90 truncate cursor-pointer" onClick={toggleShow}>{record.text}</td>
             <td>
                 <button
                     className={
@@ -87,10 +90,15 @@ export default  function TableItem({record,onDltRecord}) {
                     type="button"
                     onClick={() => onDltRecord(record._id)}
                 >
-                    <AiOutlineDelete className="w-5 h-5 fill-white " />
+                    <AiOutlineDelete className="w-5 h-5 fill-white" />
                 </button>
             </td>
         </tr>
+            {isShow &&  <tr>
+                <td colSpan="4" onClick={toggleShow} className="px-5 bg-amber-100  rounded">{record.text}</td>
+            </tr> }
+
+        </>
     )
 
 }
