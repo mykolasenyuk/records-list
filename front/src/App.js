@@ -1,12 +1,7 @@
 import {Suspense, useEffect, useState} from 'react'
-import { addRecord, dltRecord, fetchRecords } from './services/api'
-import AudioRecoder from './components/AudioRecoder/AudioRecoder'
-import Header from './components/Header/Header'
-import RecordsTable from './components/RecordsTable/RecordsTable'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Dna } from  'react-loader-spinner'
-import Paginate from "./components/Paginate/Paginate";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./views/Login";
 import RecordsList from "./views/RecordsList";

@@ -49,18 +49,7 @@ export default  function TableItem({record,onDltRecord}) {
     const getTimeString = (seconds) => {
         return seconds <= 60 ? seconds.toFixed(2) + ' seconds' : (seconds / 60).toFixed(2) + ' minutes'
     }
-    const playVoice = (voiceRecord) => {
-        audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
-        audio.play()
-        setIsPlaying(!isPlaying)
 
-    }
-    const pauseVoice = (voiceRecord) => {
-        // audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
-        audio.pause()
-        setIsPlaying(!isPlaying)
-
-    }
     const toggleShow=()=>{
         setIsShow(!isShow)
     }
