@@ -1,4 +1,3 @@
-import { useState ,useEffect} from 'react'
 import TableItem from "../TableItem/TableItem";
 
 export default function RecordsTable({ records, onDltRecord ,totalDuration}) {

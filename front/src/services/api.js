@@ -1,31 +1,31 @@
 import axios from 'axios'
 import getBlobDuration from "get-blob-duration";
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'http://records.localhost/api'
 
-const b64toBlob = (b64Data, contentType='audio/webm', sliceSize=512) => {
-  const byteCharacters = atob(b64Data.replace('data:audio/webm;codecs=opus;base64,', ''));
-  const byteArrays = [];
+// const b64toBlob = (b64Data, contentType='audio/webm', sliceSize=512) => {
+//   const byteCharacters = atob(b64Data.replace('data:audio/webm;codecs=opus;base64,', ''));
+//   const byteArrays = [];
+//
+//   for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+//     const slice = byteCharacters.slice(offset, offset + sliceSize);
+//
+//     const byteNumbers = new Array(slice.length);
+//     for (let i = 0; i < slice.length; i++) {
+//       byteNumbers[i] = slice.charCodeAt(i);
+//     }
+//
+//     const byteArray = new Uint8Array(byteNumbers);
+//     byteArrays.push(byteArray);
+//   }
+//
+//   return new Blob(byteArrays, {type: contentType});
+// }
 
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
-
-  return new Blob(byteArrays, {type: contentType});
-}
-
-const getDuration = async (voiceRecord) => {
-  const blob = b64toBlob(voiceRecord)
-  return await getBlobDuration(blob)
-}
+// const getDuration = async (voiceRecord) => {
+//   const blob = b64toBlob(voiceRecord)
+//   return await getBlobDuration(blob)
+// }
 
 const user = JSON.parse(localStorage.getItem('user'))
 const authData = { 'Authorization': 'Basic ' + user }
@@ -36,10 +36,6 @@ export async function fetchRecords(page) {
     const {data} = await axios.get(`/records?page=${page}`,{headers: {common: authData}})
 
     const records = data;
-    // for (let i = 0; i < records.length; ++i) {
-    //   records[i].duration = await getDuration(records[i].voice_record)
-    //
-    // }
     return records
   } catch (error) {
     console.log(error)

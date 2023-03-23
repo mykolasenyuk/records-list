@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import { useState} from 'react'
 import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder'
 import {MdDataSaverOn, MdCancel} from "react-icons/md";
 import getBlobDuration from "get-blob-duration";
@@ -19,19 +19,6 @@ export default function AudioRecoder({ onSubmit }) {
     const timeDuration = await getBlobDuration(blob)
     setDuration(timeDuration)
   }
-  const blobUrlToBase64 = blobUrl => {
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      fetch(blobUrl)
-        .then(response => response.blob())
-        .then(blob => {
-          reader.readAsDataURL(blob);
-          reader.onloadend = () => {
-            resolve(reader.result);
-          };
-        })
-    });
-  };
   const blobToBase64 = blob => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
