@@ -13,8 +13,11 @@ services:
   back:
     image: records-list-back
     build: .
-
-
+    environment:
+      - DB_HOST=${DB_HOST}
+      - SECRET_KEY=${SECRET_KEY}
+      - USERNAME=${USERNAME}
+      - PASSWORD=${PASSWORD}
     networks:
       - general
 

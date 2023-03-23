@@ -1,9 +1,10 @@
 FROM node:19.2-alpine
 
-ENV DB_HOST mongodb+srv://tecster:tecster2005@cluster0.xetew.mongodb.net/records_db?retryWrites=true&w=majority
-ENV SECRET_KEY records_db
-ENV USERNAME admin
-ENV PASSWORD pass
+ENV DB_HOST ""
+ENV SECRET_KEY ""
+ENV USERNAME ""
+ENV PASSWORD ""
+
 # App directory
 WORKDIR /app
 
@@ -15,7 +16,7 @@ RUN npm i
 COPY . .
 
 # Env setup
-COPY .env.example .env
+COPY .env .env
 
 #Expose port and begin application
 EXPOSE 3000
