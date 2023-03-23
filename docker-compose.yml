@@ -1,22 +1,32 @@
-version: "1"
+version: "3"
 services:
-  nest:
-    container_name: nest
-    build: .
-    ports:
-      - "9003:3000"
+  nginx:
+    image: nginx
+    networks:
+      - general
+      - reverseproxy_default
     volumes:
-      - .:/app
-    links:
-      - mongo
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
-      MONGO_INITDB_DATABASE: nest
-    volumes:
-      - data-volume:/data/db
+      - VIRTUAL_HOST=${DOMAINS}
+
+  back:
+    image: records-list-back
+    build: .
+
+
+    networks:
+      - general
+
+  front:
+    image: records-list-front
+    build: ./front
+    networks:
+      - general
+
 volumes:
   data-volume:
+networks:
+  general:
+  reverseproxy_default:
+    external: true

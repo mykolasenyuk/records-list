@@ -15,9 +15,9 @@ app.use(express.json())
 app.use(express.static('public'))
 app.use(authentication)
 
-app.use('/records', recordsRouter)
+app.use('/api/records', recordsRouter)
 
-app.use((req, res) => {
+app.use((req, res) => {c§§
   res.status(404).json({
     status: 'error',
     message: 'Not  Found',

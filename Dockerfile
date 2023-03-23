@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:19.2-alpine
 
 ENV DB_HOST mongodb+srv://tecster:tecster2005@cluster0.xetew.mongodb.net/records_db?retryWrites=true&w=majority
 ENV SECRET_KEY records_db
@@ -22,3 +22,4 @@ EXPOSE 3000
 
 # Start the app
 CMD [ "npm", "run", "start"]
+
