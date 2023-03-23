@@ -17,7 +17,7 @@ app.use(authentication)
 
 app.use('/api/records', recordsRouter)
 
-app.use((req, res) => {c§§
+app.use((req, res) => {
   res.status(404).json({
     status: 'error',
     message: 'Not  Found',
