@@ -3,7 +3,7 @@ const { Record } = require('../../models')
 const getAllRecords = async (req, res, next) => {
   try {
     const { limit = 15, page = 1} = req.query
-    const { docs: records, ...rest } = await Record.paginate({},{limit,page})
+    const { docs: records, ...rest } = await Record.paginate({},{limit,page, sort: {createdAt: -1}})
     const totalDuration = await Record.aggregate([
       {
         $group: { _id: " ", total: { $sum: "$duration" } },
