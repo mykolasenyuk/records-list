@@ -1,7 +1,7 @@
 import axios from 'axios'
 import getBlobDuration from "get-blob-duration";
 
-axios.defaults.baseURL = 'http://records.localhost/api'
+axios.defaults.baseURL = 'https://voices.in-the.dev/api'
 
 // const b64toBlob = (b64Data, contentType='audio/webm', sliceSize=512) => {
 //   const byteCharacters = atob(b64Data.replace('data:audio/webm;codecs=opus;base64,', ''));

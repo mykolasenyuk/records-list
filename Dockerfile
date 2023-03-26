@@ -5,6 +5,8 @@ ENV SECRET_KEY ""
 ENV USERNAME ""
 ENV PASSWORD ""
 
+RUN apk add --no-cache ffmpeg
+
 # App directory
 WORKDIR /app
 
@@ -16,7 +18,7 @@ RUN npm i
 COPY . .
 
 # Env setup
-COPY .env .env
+COPY .env.example .env
 
 #Expose port and begin application
 EXPOSE 3000

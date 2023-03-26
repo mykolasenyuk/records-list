@@ -1,6 +1,6 @@
 import {AiFillPauseCircle, AiFillPlayCircle,AiOutlineDelete} from "react-icons/ai";
 import {useEffect, useState} from "react";
-
+import getBlobDuration from "get-blob-duration";
 
 export default  function TableItem({record,onDltRecord}) {
     const [isPlaying, setIsPlaying] = useState(false)
@@ -29,21 +29,22 @@ export default  function TableItem({record,onDltRecord}) {
         return new Blob(byteArrays, { type: contentType })
     }
     const togglePlay = async (voiceRecord,duration) => {
-        audio.src = URL.createObjectURL(b64toBlob(voiceRecord))
-        const time = duration * 1000
         if (!isPlaying) {
-            setIsPlaying(!isPlaying)
-            await audio.play()
+            const blob = b64toBlob(voiceRecord);
+            duration = duration || await getBlobDuration(blob);
+            audio.src = URL.createObjectURL(blob)
+            const time = duration * 1000
+            setIsPlaying(true)
+            await audio.play();
             setTimeout(() => {
                 setIsPlaying(false)
                 audio.pause()
-            }, time)
+            }, time);
         }
-        // else {
-        //     audio.pause()
-        //     setIsPlaying(!isPlaying)
-        //     return;
-        // }
+        else {
+            setIsPlaying(false)
+            audio.pause()
+        }
     }
 
     const getTimeString = (seconds) => {
@@ -62,14 +63,14 @@ export default  function TableItem({record,onDltRecord}) {
         <>
         <tr>
             <td className={'px-5'}>
-                <button type='button' onClick={()=>{togglePlay(record.voice_record,record.duration)}} >
+                <button type='button' onClick={()=>{ togglePlay(record.voice_record, record.duration || 0) }} >
                     {isPlaying ? <AiFillPauseCircle  className="w-8 h-8 fill-blue-500  scale-90  animate-pulse" />
                         : <AiFillPlayCircle className="w-8 h-8 fill-white ease-in-out hover:fill-blue-500 hover:duration-300 hover:scale-90  "   />}
 
                 </button>
 
             </td>
-            <td className="px-5 text-cyan-100">{getTimeString(record.duration)}</td>
+            <td className="px-5 text-cyan-100">{getTimeString(record.duration || 0)}</td>
             <td className="max-w-[50px]  text-cyan-100 hover:text-blue-500 duration-300 hover:scale-90 truncate cursor-pointer" onClick={toggleShow}>{record.text}</td>
             <td>
                 <button
