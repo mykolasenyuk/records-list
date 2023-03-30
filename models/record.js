@@ -1,38 +1,41 @@
-const { Schema, model } = require('mongoose')
-const Joi = require('joi')
-const mongoosePaginate = require('mongoose-paginate-v2')
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const recordSchema = Schema(
   {
     text: {
       type: String,
-      required: [true, 'text is required'],
+      required: [true, "text is required"],
     },
-      duration:{
-          type:Number,
-          required:[true, 'duration is required'],
-      },
+    duration: {
+      type: Number,
+      required: [true, "duration is required"],
+    },
     voice_record: {
       type: String,
-      required: [true, 'voice_record is required'],
+      required: [true, "voice_record is required"],
     },
-
+    voice_record_mp3: {
+      type: String,
+      required: [true, "voice_record_mp3 is required"],
+    },
   },
-
-  { versionKey: false, timestamps: true },
-)
+  { versionKey: false, timestamps: true }
+);
 
 const joiSchema = Joi.object({
-    text: Joi.string().min(3),
-    voice_record: Joi.string(),
-    duration:Joi.number(),
-})
+  text: Joi.string().min(3),
+  voice_record: Joi.string(),
+  voice_record_mp3: Joi.string(),
+  duration: Joi.number(),
+});
 
-recordSchema.plugin(mongoosePaginate)
+recordSchema.plugin(mongoosePaginate);
 
-const Record = model('record', recordSchema)
+const Record = model("record", recordSchema);
 
 module.exports = {
   Record,
   joiSchema,
-}
+};
