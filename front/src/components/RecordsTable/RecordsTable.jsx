@@ -34,6 +34,7 @@ export default function RecordsTable({
             <th>Duration</th>
             <th>Caption</th>
             <th>Controls</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>

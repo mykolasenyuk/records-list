@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import getBlobDuration from "get-blob-duration";
 import b64toBlob from "../../utils/fromBase64ToBlob";
+import moment from "moment";
 
 export default function TableItem({ record, onDltRecord, downloadRecord }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,6 +38,7 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
       ? seconds.toFixed(2) + " seconds"
       : (seconds / 60).toFixed(2) + " minutes";
   };
+  const date = moment(record.createdAt).format("MMMM Do YYYY, HH:mm:ss");
 
   const toggleShow = () => {
     setIsShow(!isShow);
@@ -92,6 +94,9 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
           >
             <AiOutlineDelete className="w-5 h-5 fill-white" />
           </button>
+        </td>
+        <td className="max-w-[50px]  text-cyan-100  duration-300 hover:scale-90  cursor-pointer">
+          {date}
         </td>
       </tr>
       {isShow && (
