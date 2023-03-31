@@ -53,8 +53,8 @@ const addRecord = async (req, res, next) => {
     res.status(201).json({
       result,
     });
-    fs.unlinkSync(outputFilename);
-    fs.unlinkSync(outputMp3Filename);
+    // fs.unlinkSync(outputFilename);
+    // fs.unlinkSync(outputMp3Filename);
   } catch (error) {
     next(error);
   }

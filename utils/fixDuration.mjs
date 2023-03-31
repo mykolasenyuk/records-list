@@ -10,7 +10,7 @@ import { v4 } from 'uuid';
 import minioConnect from "../middlewares/minIOconnect.js";
 import minioClient from "../middlewares/minioClient.js";
 
-const name = `${v4()}.mp3`;
+
 
 
 const { DB_HOST,BUCKET_NAME,MINIO_ACCESS_KEY, MINIO_SECRET_KEY  } =process.env ;
@@ -59,6 +59,7 @@ const getAllRecords = async () => {
         const outputMp3Filename = 'output.mp3';
 
         fs.writeFileSync(outputFilename, wavData);
+        await convertOpusToMp3(outputFilename, outputMp3Filename);
 
 
         const metaData = {
@@ -66,6 +67,7 @@ const getAllRecords = async () => {
           "X-Amz-Meta-Testing": 1234,
           example: 5678,
         };
+        const name = `${v4()}.mp3`;
 
         try {
           const fileBuffer = await fs.promises.readFile(outputMp3Filename);
@@ -75,7 +77,7 @@ const getAllRecords = async () => {
             onCodecUpdate: () => {},
             enableLogging: true,
           };
-          await convertOpusToMp3(outputFilename, outputMp3Filename);
+
           await uploadFile(BUCKET_NAME, name, outputFilename, metaData)
 
           const parser = new CodecParser(mimeType, options);
@@ -87,8 +89,7 @@ const getAllRecords = async () => {
           doc.voice_record_mp3=name
 
           await doc.save();
-          fs.unlinkSync(outputFilename);
-          fs.unlinkSync(outputMp3Filename);
+
         } catch (err) {
           console.error('Error reading MP3 file:', err);
         }
