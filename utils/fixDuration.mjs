@@ -12,7 +12,6 @@ import minioClient from "../middlewares/minioClient.js";
 
 
 
-
 const { DB_HOST,BUCKET_NAME,MINIO_ACCESS_KEY, MINIO_SECRET_KEY  } =process.env ;
 const s3Client = minioClient({MINIO_ACCESS_KEY, MINIO_SECRET_KEY })
 console.log(BUCKET_NAME);

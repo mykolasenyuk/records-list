@@ -1,4 +1,4 @@
-const addRecord = require("./addRecord");
+const addRecord = require("./addRecord.js");
 const getAllRecords = require("./getAllRecords");
 const getRecordById = require("./getRecordById");
 const dltRecordById = require("./dltRecord");

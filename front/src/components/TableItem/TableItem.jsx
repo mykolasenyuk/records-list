@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import getBlobDuration from "get-blob-duration";
 import b64toBlob from "../../utils/fromBase64ToBlob";
 import moment from "moment";
+import { generateRecordUrl } from "../../services/api";
 
 export default function TableItem({ record, onDltRecord, downloadRecord }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -15,11 +16,14 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
 
   const audio = new Audio();
 
-  const togglePlay = async (voiceRecord, duration) => {
+  const togglePlay = async (voiceRecord, duration, recordId) => {
     if (!isPlaying) {
-      const blob = b64toBlob(voiceRecord);
-      duration = duration || (await getBlobDuration(blob));
-      audio.src = URL.createObjectURL(blob);
+      const data = await generateRecordUrl(recordId);
+      audio.src = data;
+
+      // const blob = b64toBlob(voiceRecord);
+      // duration = duration || (await getBlobDuration(blob));
+      // audio.src = URL.createObjectURL(blob);
       const time = duration * 1000;
       setIsPlaying(true);
       await audio.play();
@@ -56,7 +60,7 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
             className={"mr-2"}
             type="button"
             onClick={() => {
-              togglePlay(record.voice_record, record.duration || 0);
+              togglePlay(record.voice_record, record.duration || 0, record._id);
             }}
           >
             {isPlaying ? (

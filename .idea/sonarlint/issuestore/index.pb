@@ -4,8 +4,6 @@ B
 :
 
 Dockerfile,6/6/6651ddff6eb82c840ced7c1dddee15c6e1913dd4
-S
-#front/src/utils/fromBase64ToBlob.js,2/e/2e6233b28f49ecb5a8c97dde574685b98d60ba2c
 :
 
 front/.env,d/d/dd51372c21e9ca3ee1eff697411dde2cb1a119af
@@ -19,17 +17,21 @@ E
 front/src/App.test.js,3/1/31513216f9842206251df9887e4e869addd1c166
 4
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
-b
-2front/src/components/AudioRecoder/AudioRecoder.jsx,d/6/d6e757eaf8b951df5eab2400994e5441f973b66e
-b
-2front/src/components/RecordsTable/RecordsTable.jsx,3/e/3ee9671d518ccbef627205546d32b9efff0dc3db
-\
-,front/src/components/TableItem/TableItem.jsx,f/d/fd067d20003c87bbf905412484a02493c88009b9
 @
 front/src/App.js,6/b/6bdeeb7e88e830ce7313a86e5329621204411249
-O
-front/src/views/RecordsList.jsx,8/b/8bc3c416b2ce0a3ed7916480afc6cb8031020c05
-M
-middlewares/authentication.js,9/e/9eeda0172ff07dce1f3c54e35d78e3a1f36f4ab0
-E
-middlewares/upload.js,6/e/6e14dc27db7797acb7f70c67a074032f6736d653
+I
+middlewares/validation.js,7/5/757bd77e4c85c373cf23c0c30121026335b6d173
+T
+$controllers/records/getAllRecords.js,c/0/c0fec7fec3786c704301b8c882a6dac9b0ca2e98
+@
+models/record.js,d/8/d8ffd60be5fec53353c1a9399333fc14ee958b5f
+^
+.controllers/records/generateDownloadUrlById.js,c/8/c89f6ffe7f64019c0fd73c843c428e5e9e8b8666
+<
+.env.example,d/4/d4dae00d11854b35292c2b8a30515a9a0aa2d871
+T
+$controllers/records/getRecordById.js,d/6/d63f23fa3b59b8c45fc6a0e7a3a76267e4012219
+B
+front/package.json,9/f/9f133e1f3b36f3ee5044a78511e53520382b1b19
+?
+front/yarn.lock,5/4/546b1b7878e085cae25a444977964a6c95e1c971
