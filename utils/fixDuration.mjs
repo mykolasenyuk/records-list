@@ -1,38 +1,35 @@
 import fs from 'fs';
 import mongoose from 'mongoose';
 import CodecParser from 'codec-parser';
-import { config } from 'dotenv';
 import { Record } from '../models/index.js';
-import ffmpeg from 'fluent-ffmpeg';
+import convertOpusToMp3 from "./convertOpusToMp3.js";
 
-config();
+import * as dotenv from 'dotenv'
+dotenv.config()
+import { v4 } from 'uuid';
+import minioConnect from "../middlewares/minIOconnect.js";
+import minioClient from "../middlewares/minioClient.js";
 
-const convertOpusToMp3 = async (input, output) => {
+
+
+const { DB_HOST,BUCKET_NAME,MINIO_ACCESS_KEY, MINIO_SECRET_KEY  } =process.env ;
+const s3Client = minioClient({MINIO_ACCESS_KEY, MINIO_SECRET_KEY })
+console.log(BUCKET_NAME);
+mongoose.set('strictQuery', false);
+
+const uploadFile = (bucketName, name, outputFilename, metaData) => {
   return new Promise((resolve, reject) => {
-    ffmpeg()
-      .input(input)
-      .format('mp3')
-      .on('start', () => {
-        console.log(`Starting conversion from ${input} to ${output}`);
-      })
-      .on('progress', (progress) => {
-        // console.log(`Progress: ${progress.percent.toFixed(2)}%`);
-      })
-      .on('end', () => {
-        console.log(`Conversion completed: ${output}`);
-        resolve();
-      })
-      .on('error', (err) => {
-        console.error(`Error during conversion: ${err.message}`);
+    s3Client.fPutObject(bucketName, name, outputFilename, metaData, (err, etag) => {
+      if (err) {
         reject(err);
-      })
-      .save(output);
+      } else {
+        console.log("File uploaded successfully.");
+        resolve(etag);
+      }
+    });
   });
 };
 
-const { DB_HOST } = process.env;
-
-mongoose.set('strictQuery', false);
 mongoose
   .connect(DB_HOST, {
     useNewUrlParser: true,
@@ -46,8 +43,10 @@ mongoose
 
 const getAllRecords = async () => {
   try {
+    await minioConnect(s3Client, BUCKET_NAME)
     const cursor = Record.find().cursor();
     console.log('Start');
+
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
       try {
         const wavData = Buffer.from(
@@ -61,6 +60,14 @@ const getAllRecords = async () => {
         fs.writeFileSync(outputFilename, wavData);
         await convertOpusToMp3(outputFilename, outputMp3Filename);
 
+
+        const metaData = {
+          "Content-Type": "application/octet-stream",
+          "X-Amz-Meta-Testing": 1234,
+          example: 5678,
+        };
+        const name = `${v4()}.mp3`;
+
         try {
           const fileBuffer = await fs.promises.readFile(outputMp3Filename);
           const mimeType = 'audio/mpeg';
@@ -70,13 +77,18 @@ const getAllRecords = async () => {
             enableLogging: true,
           };
 
+          await uploadFile(BUCKET_NAME, name, outputFilename, metaData)
+
           const parser = new CodecParser(mimeType, options);
           const dur = parser
             .parseAll(fileBuffer)
             .map((f) => f.duration)
             .reduce((a, b) => a + b, 0);
           doc.duration = dur / 1000;
+          doc.voice_record_mp3=name
+
           await doc.save();
+
         } catch (err) {
           console.error('Error reading MP3 file:', err);
         }

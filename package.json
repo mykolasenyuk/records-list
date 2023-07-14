@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js"
+    "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
+    "fix-dur": "node ./utils/fixDuration.mjs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1345.0",
     "codec-parser": "^2.2.1",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -18,11 +20,14 @@
     "fluent-ffmpeg": "^2.1.2",
     "get-audio-duration": "3.1.1",
     "get-blob-duration": "^1.2.0",
+    "gridfs-stream": "^1.1.1",
     "http-errors": "^2.0.0",
     "joi": "^17.7.0",
+    "minio": "^7.0.33",
     "mongoose": "^6.8.0",
     "mongoose-paginate-v2": "^1.7.1",
     "morgan": "^1.10.0",
+    "uuid": "^9.0.0",
     "wav-file-info": "^0.0.10",
     "yarn": "^1.22.19"
   },
