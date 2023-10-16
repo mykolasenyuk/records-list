@@ -9,10 +9,14 @@ import getBlobDuration from "get-blob-duration";
 import b64toBlob from "../../utils/fromBase64ToBlob";
 import moment from "moment";
 import { generateRecordUrl } from "../../services/api";
+import Modal from "../Modal/Modal";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
 
 export default function TableItem({ record, onDltRecord, downloadRecord }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [audioId, setAudioId] = useState("");
 
   const audio = new Audio();
 
@@ -48,9 +52,18 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
     setIsShow(!isShow);
   };
 
+  async function handleDelete(id) {
+    setModalIsOpen(true);
+    setAudioId(id);
+  }
+  async function onDeleteConfirm() {
+    await onDltRecord(audioId);
+    setAudioId("");
+  }
+
   useEffect(() => {
     console.log("Playing: ", isPlaying);
-  }, [isPlaying]);
+  }, [isPlaying, modalIsOpen]);
 
   return (
     <>
@@ -59,8 +72,12 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
           <button
             className={"mr-2"}
             type="button"
-            onClick={() => {
-              togglePlay(record.voice_record, record.duration || 0, record._id);
+            onClick={async () => {
+              await togglePlay(
+                record.voice_record,
+                record.duration || 0,
+                record._id
+              );
             }}
           >
             {isPlaying ? (
@@ -94,7 +111,9 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
               "bg-red-500 hover:bg-red-700 text-white font-bold p-2  rounded-full m-2 ease-in-out hover:duration-300 hover:scale-90 "
             }
             type="button"
-            onClick={() => onDltRecord(record._id)}
+            onClick={async () => {
+              await handleDelete(record._id);
+            }}
           >
             <AiOutlineDelete className="w-5 h-5 fill-white" />
           </button>
@@ -113,6 +132,20 @@ export default function TableItem({ record, onDltRecord, downloadRecord }) {
             {record.text}
           </td>
         </tr>
+      )}
+      {modalIsOpen && (
+        <Modal
+          onClose={() => {
+            setModalIsOpen(false);
+          }}
+        >
+          <ConfirmModal
+            confirm={onDeleteConfirm}
+            cancel={() => {
+              setModalIsOpen(false);
+            }}
+          />
+        </Modal>
       )}
     </>
   );
