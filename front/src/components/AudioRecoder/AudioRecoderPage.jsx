@@ -8,8 +8,9 @@ import SaveCancelBtns from "../SaveCancelBtns.jsx/SaveCancelBtns";
 import Modal from "../Modal/Modal";
 import Input from "../Input/Input";
 import { logDOM } from "@testing-library/react";
+import Recorder from "../Recoder/Recorder";
 
-export default function AudioRecoder({ onSubmit }) {
+export default function AudioRecoderPage({ onSubmit, isSaving, setIsSaving }) {
   const [text, setText] = useState("");
   const [voice_record_url, setVoiceRecordUrl] = useState("");
   const [voice_record_blob, setVoiceRecordBlob] = useState("");
@@ -24,6 +25,7 @@ export default function AudioRecoder({ onSubmit }) {
   const [savedChunks, setSavedChunks] = useState([]);
   const [editedChunk, setEditedChunk] = useState("");
   let [count, setCount] = useState(0);
+  // const [isSaving, setIsSaving] = useState(false);
 
   const splitTextIntoChunks = (text, chunkSize) => {
     const words = text.split(" ");
@@ -71,6 +73,9 @@ export default function AudioRecoder({ onSubmit }) {
         }
         break;
       case "chunk":
+        if (!value) {
+          setEditedChunk(value);
+        }
         replaceChunk(value);
         break;
     }
@@ -102,6 +107,7 @@ export default function AudioRecoder({ onSubmit }) {
     setIsRecording(false);
     setSelectedFile(null);
     setUploadedBase64("");
+    setIsSaving(false);
   };
   const changeHandler = async (event) => {
     setSelectedFile(event.target.files[0]);
@@ -122,26 +128,28 @@ export default function AudioRecoder({ onSubmit }) {
     setModalIsOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setIsSaving(true);
     e.preventDefault();
-    const stringFromChunks =
-      savedChunks.length > 0 ? savedChunks.join(" ") : "";
 
     if (isSelected) {
-      onSubmit({
-        text: stringFromChunks ? stringFromChunks : text,
+      console.log(isSaving);
+      await onSubmit({
+        text: editedChunk ? editedChunk : text,
         voice_record: uploadedBase64,
-      }).then(reset);
+      });
+      await reset();
     } else {
-      blobToBase64(voice_record_blob)
-        .then((voiceRecordInBase64) => {
-          onSubmit({
-            text: stringFromChunks ? stringFromChunks : text,
-            voice_record: voiceRecordInBase64,
-            duration,
-          });
-        })
-        .then(reset);
+      setIsSaving(true);
+      console.log(isSaving);
+      await blobToBase64(voice_record_blob).then((voiceRecordInBase64) => {
+        onSubmit({
+          text: editedChunk ? editedChunk : text,
+          voice_record: voiceRecordInBase64,
+          duration,
+        });
+      });
+      await reset();
     }
   };
   const onNextClick = () => {
@@ -223,51 +231,49 @@ export default function AudioRecoder({ onSubmit }) {
           ></textarea>
         )}
 
-        {!voice_record_url && text.length > 0 && (
-          <div className={"flex"}>
-            {!isSelected && (
-              <div
-                className={
-                  "inline ease-in-out hover:duration-300 hover:scale-90"
-                }
-                onClick={onRecording}
-              >
-                <AudioRecorder
-                  onRecordingComplete={addAudioElement}
-                  recorderControlls={recorderControls}
+        {!voice_record_url &&
+          (editedChunk ? editedChunk.length > 0 : text.length > 0) && (
+            <div className={"flex"}>
+              {!isSelected && (
+                <Recorder
+                  onRecording={onRecording}
+                  addAudioElement={addAudioElement}
+                  recorderControls={recorderControls}
+                  isSaving={isSaving}
                 />
-              </div>
-            )}
-            {!isRecording && (
-              <label
-                className="w-10 h-10 bg-blue-500 ml-10 flex  justify-center items-center  shadow-lg shadow-slate-500/50 text-white font-bold rounded-full ease-in-out hover:duration-300 hover:scale-90 "
-                htmlFor="inputTag"
-              >
-                <AiOutlineCloudUpload />
-                <input
-                  className="hidden"
-                  id="inputTag"
-                  type="file"
-                  onChange={changeHandler}
-                />
-              </label>
-            )}
+              )}
+              {!isRecording && (
+                <label
+                  className="w-10 h-10 bg-blue-500 ml-10 flex  justify-center items-center  shadow-lg shadow-slate-500/50 text-white font-bold rounded-full ease-in-out hover:duration-300 hover:scale-90 "
+                  htmlFor="inputTag"
+                >
+                  <AiOutlineCloudUpload />
+                  <input
+                    className="hidden"
+                    id="inputTag"
+                    type="file"
+                    onChange={changeHandler}
+                  />
+                </label>
+              )}
 
-            {isSelected && (
-              <div className="block ml-5 p-2.5 rounded-lg border border-gray-300  text-cyan-200">
-                <p>Filename: {selectedFile.name}</p>
-                <p>Filetype: {selectedFile.type}</p>
-                <p>Size in bytes: {selectedFile.size}</p>
-              </div>
-            )}
-          </div>
-        )}
-        {voice_record_url && text.length > 0 && (
-          <audio src={voice_record_url} controls></audio>
-        )}
-        {voice_record_url && text.length > 0 && (
-          <SaveCancelBtns reset={reset} />
-        )}
+              {isSelected && (
+                <div className="block ml-5 p-2.5 rounded-lg border border-gray-300  text-cyan-200">
+                  <p>Filename: {selectedFile.name}</p>
+                  <p>Filetype: {selectedFile.type}</p>
+                  <p>Size in bytes: {selectedFile.size}</p>
+                </div>
+              )}
+            </div>
+          )}
+        {voice_record_url &&
+          (editedChunk ? editedChunk.length > 0 : text.length > 0) && (
+            <audio src={voice_record_url} controls></audio>
+          )}
+        {voice_record_url &&
+          (editedChunk ? editedChunk.length > 0 : text.length > 0) && (
+            <SaveCancelBtns reset={reset} />
+          )}
         {isSelected && text.length > 0 && <SaveCancelBtns reset={reset} />}
       </form>
       {modalIsOpen && (

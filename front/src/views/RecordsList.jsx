@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Header from "../components/Header/Header";
 import { Dna } from "react-loader-spinner";
-import AudioRecoder from "../components/AudioRecoder/AudioRecoder";
+import AudioRecoderPage from "../components/AudioRecoder/AudioRecoderPage";
 import RecordsTable from "../components/RecordsTable/RecordsTable";
 import Paginate from "../components/Paginate/Paginate";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,8 @@ export default function RecordsList() {
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(1);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
+
   const navigate = useNavigate();
 
   const addVoiceRecord = async ({ text, voice_record, duration }) => {
@@ -42,24 +44,32 @@ export default function RecordsList() {
     setIsLogged(!isLogged);
     await fetchData(page);
   };
+  const saving = () => {
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 300);
+  };
   const loading = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1000);
   };
 
   const handleSubmitRecord = async ({ text, voice_record, duration }) => {
     if (records.find((record) => record.text === text)) {
       toast.error(` 🛑 '${text}' is already in your list`);
+      // saving();
       return;
     }
     if (records.find((record) => record.voice_record === voice_record)) {
       toast.error(`🛑 '${voice_record}' is already in your list`);
+      // saving();
       return;
     }
     await addVoiceRecord({ text, voice_record, duration });
-    await loading();
+    // await loading();
     toast.success(`🚀 '${text}' added to record list`);
   };
 
@@ -93,7 +103,7 @@ export default function RecordsList() {
   }, [isLoading, page]);
 
   useEffect(() => {
-    loading();
+    // loading();
   }, []);
   return (
     <>
@@ -113,13 +123,20 @@ export default function RecordsList() {
         ) : (
           <div>
             {" "}
-            <AudioRecoder onSubmit={handleSubmitRecord} />
+            <AudioRecoderPage
+              onSubmit={handleSubmitRecord}
+              isSaving={isSaving}
+              setIsSaving={setIsSaving}
+            />
             {records && records.length > 0 && (
               <RecordsTable
                 records={records}
                 onDltRecord={deleteRecord}
                 totalDuration={totalDuration}
                 downloadRecord={downloadRecord}
+                isSaving={isSaving}
+                fetchData={fetchData}
+                // loading={loading}
               />
             )}
           </div>
