@@ -1,10 +1,13 @@
 import TableItem from "../TableItem/TableItem";
+import { useEffect } from "react";
 
 export default function RecordsTable({
   records,
   onDltRecord,
   totalDuration,
   downloadRecord,
+  isSaving,
+  fetchData,
 }) {
   function formatDuration(seconds) {
     const hrs = Math.floor(seconds / 3600);
@@ -17,6 +20,12 @@ export default function RecordsTable({
 
     return `${formattedHrs}${formattedMins}${formattedSecs}`.trim();
   }
+  useEffect(() => {
+    fetchData(1);
+  }, [isSaving]);
+  useEffect(() => {
+    // loading();
+  }, []);
 
   return (
     <>
