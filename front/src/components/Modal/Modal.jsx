@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
-export default function Modal({ onClose, children }) {
+export default function Modal({ onClose, children, style }) {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => {
@@ -30,10 +30,12 @@ export default function Modal({ onClose, children }) {
   return ReactDOM.createPortal(
     <div
       className={
-        "fixed w-screen h-screen z-50  flex justify-center items-center top-0 left-0 backdrop-blur-sm"
+        "fixed w-screen h-screen z-50  flex justify-center items-center top-0 left-0 backdrop-blur-sm overflow-y-auto"
       }
     >
-      <div className={"p-8 relative  bg-white rounded-xl drop-shadow-2xl"}>
+      <div
+        className={`p-8 relative bg-white rounded-xl drop-shadow-2xl  overflow-y-auto ${style} `}
+      >
         <button
           type={"button"}
           onClick={onClose}
