@@ -59,14 +59,14 @@ export default function RecordsList() {
       return;
     }
     await addVoiceRecord({ text, voice_record, duration });
-    loading();
+    await loading();
     toast.success(`🚀 '${text}' added to record list`);
   };
 
   const deleteRecord = async (recordId) => {
     await dltRecord(recordId);
+    await loading();
     toast(` 👍🏻 Deleted`);
-    loading();
   };
 
   const downloadRecord = async (recordId) => {
